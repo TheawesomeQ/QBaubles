@@ -2,8 +2,7 @@ package com.github.QBaubles.init;
 
 import com.github.QBaubles.QBaublesMod;
 import com.github.QBaubles.items.BasicStealthRing;
-import com.github.QBaubles.items.ItemBasic;
-import com.github.QBaubles.items.ItemRing;
+import com.github.QBaubles.items.GodRing;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
@@ -21,26 +20,29 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 @Mod.EventBusSubscriber(modid = QBaublesMod.MODID)
 public class ModItems {
 	static Item basicstealthring;
+	static Item godring;
 	
 	// This method will be called to initialize the items specified in this file
 	public static void init() {
-		basicstealthring = new BasicStealthRing("basicstealthring"); //new ItemRing("basicstealthring").setCreativeTab(CreativeTabs.MISC);// new ItemBasic("basicstealthring").setCreativeTab(CreativeTabs.MISC);
+		basicstealthring = new BasicStealthRing("basicstealthring").setCreativeTab(CreativeTabs.MISC); // the string "basicstealthring" is the item id 
+		godring = new GodRing("godring");
 	}
 	
 	// This @ tag is used to assign event handlers for forge events. This one triggers during the registerItems event
 	// Its argument is the event type it is handling: an item type registry event
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> event) {
-		event.getRegistry().registerAll(basicstealthring);
+		event.getRegistry().registerAll(basicstealthring, godring);
 	}
 	
 	@SubscribeEvent
 	public static void registerRenders(ModelRegistryEvent event) {
 		registerRender(basicstealthring);
+		registerRender(godring);
 	}
 	
 	private static void registerRender(Item item) {
 		//https://forums.minecraftforge.net/topic/36459-modelresourcelocation-parameters/
-		ModelLoader.setCustomModelResourceLocation(basicstealthring, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
 	}
 }
