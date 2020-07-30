@@ -1,6 +1,7 @@
 package com.github.QBaubles.init;
 
 import com.github.QBaubles.QBaublesMod;
+import com.github.QBaubles.items.BasicStealthRing;
 import com.github.QBaubles.items.ItemBasic;
 import com.github.QBaubles.items.ItemRing;
 
@@ -23,7 +24,7 @@ public class ModItems {
 	
 	// This method will be called to initialize the items specified in this file
 	public static void init() {
-		basicstealthring = new ItemRing("basicstealthring").setCreativeTab(CreativeTabs.MISC);// new ItemBasic("basicstealthring").setCreativeTab(CreativeTabs.MISC);
+		basicstealthring = new BasicStealthRing("basicstealthring"); //new ItemRing("basicstealthring").setCreativeTab(CreativeTabs.MISC);// new ItemBasic("basicstealthring").setCreativeTab(CreativeTabs.MISC);
 	}
 	
 	// This @ tag is used to assign event handlers for forge events. This one triggers during the registerItems event
