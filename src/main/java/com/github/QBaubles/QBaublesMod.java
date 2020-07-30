@@ -40,3 +40,15 @@ public class QBaublesMod {
     }
 
 }
+
+
+/*
+ * Process for adding a new bauble:
+ * - Create a class for the new bauble. Inherit from ItemBasic and implement IBauble.
+ * - Declare it in ModItems main.
+ * - Instantiate that class in ModItems init function
+ * - Create a texture image and place it in assets.qbaubles.textures.items (name whatever, but should be same as id)
+ * - Create a render format json in assets.qbaubles.models.item (name lowercase, just make it same as id)
+ * - Add a line associating the item with a human readable text name in assets.qbaubles.lang en_us.lang
+ * - Create a recipe json if desired in assets.qbaubles.recipes
+ */
