@@ -1,0 +1,139 @@
+[1mdiff --git a/src/main/java/com/github/QBaubles/init/ModItems.java b/src/main/java/com/github/QBaubles/init/ModItems.java[m
+[1mindex a72816a..9588a1d 100644[m
+[1m--- a/src/main/java/com/github/QBaubles/init/ModItems.java[m
+[1m+++ b/src/main/java/com/github/QBaubles/init/ModItems.java[m
+[36m@@ -3,6 +3,7 @@[m [mpackage com.github.QBaubles.init;[m
+ import com.github.QBaubles.QBaublesMod;[m
+ import com.github.QBaubles.items.BasicStealthRing;[m
+ import com.github.QBaubles.items.GodRing;[m
+[32m+[m[32mimport com.github.QBaubles.items.ShieldingRing;[m[41m[m
+ [m
+ import net.minecraft.client.renderer.block.model.ModelResourceLocation;[m
+ import net.minecraft.creativetab.CreativeTabs;[m
+[36m@@ -21,28 +22,34 @@[m [mimport net.minecraftforge.fml.common.eventhandler.SubscribeEvent;[m
+ public class ModItems {[m
+ 	static Item basicstealthring;[m
+ 	static Item godring;[m
+[31m-	[m
+[32m+[m	[32mstatic Item shieldingring;[m[41m[m
+[32m+[m[41m[m
+ 	// This method will be called to initialize the items specified in this file[m
+ 	public static void init() {[m
+[31m-		basicstealthring = new BasicStealthRing("basicstealthring").setCreativeTab(CreativeTabs.MISC); // the string "basicstealthring" is the item id [m
+[32m+[m		[32m// the string "basicstealthring" is the item id[m[41m[m
+[32m+[m		[32mbasicstealthring = new BasicStealthRing("basicstealthring").setCreativeTab(CreativeTabs.MISC);[m[41m[m
+ 		godring = new GodRing("godring");[m
+[32m+[m		[32mshieldingring = new ShieldingRing("shieldingring");[m[41m[m
+ 	}[m
+[31m-	[m
+[31m-	// This @ tag is used to assign event handlers for forge events. This one triggers during the registerItems event[m
+[32m+[m[41m[m
+[32m+[m	[32m// This @ tag is used to assign event handlers for forge events. This one[m[41m[m
+[32m+[m	[32m// triggers during the registerItems event[m[41m[m
+ 	// Its argument is the event type it is handling: an item type registry event[m
+ 	@SubscribeEvent[m
+ 	public static void registerItems(RegistryEvent.Register<Item> event) {[m
+[31m-		event.getRegistry().registerAll(basicstealthring, godring);[m
+[32m+[m		[32mevent.getRegistry().registerAll(basicstealthring, godring, shieldingring);[m[41m[m
+ 	}[m
+[31m-	[m
+[32m+[m[41m[m
+ 	@SubscribeEvent[m
+ 	public static void registerRenders(ModelRegistryEvent event) {[m
+ 		registerRender(basicstealthring);[m
+ 		registerRender(godring);[m
+[32m+[m		[32mregisterRender(shieldingring);[m[41m[m
+ 	}[m
+[31m-	[m
+[32m+[m[41m[m
+ 	private static void registerRender(Item item) {[m
+[31m-		//https://forums.minecraftforge.net/topic/36459-modelresourcelocation-parameters/[m
+[31m-		ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));[m
+[32m+[m		[32m// https://forums.minecraftforge.net/topic/36459-modelresourcelocation-parameters/[m[41m[m
+[32m+[m		[32mModelLoader.setCustomModelResourceLocation(item, 0,[m[41m[m
+[32m+[m				[32mnew ModelResourceLocation(item.getRegistryName(), "inventory"));[m[41m[m
+ 	}[m
+ }[m
+[1mdiff --git a/src/main/java/com/github/QBaubles/items/BasicStealthRing.java b/src/main/java/com/github/QBaubles/items/BasicStealthRing.java[m
+[1mindex 2b42107..e22da86 100644[m
+[1m--- a/src/main/java/com/github/QBaubles/items/BasicStealthRing.java[m
+[1m+++ b/src/main/java/com/github/QBaubles/items/BasicStealthRing.java[m
+[36m@@ -4,26 +4,60 @@[m [mimport baubles.api.BaubleType;[m
+ import baubles.api.IBauble;[m
+ import net.minecraft.entity.EntityLivingBase;[m
+ import net.minecraft.item.ItemStack;[m
+[32m+[m[32mimport net.minecraftforge.client.event.RenderLivingEvent;[m[41m[m
+[32m+[m[32mimport net.minecraftforge.common.MinecraftForge;[m[41m[m
+[32m+[m[32mimport net.minecraftforge.fml.common.eventhandler.SubscribeEvent;[m[41m[m
+ [m
+ /*[m
+  * This is the class for the Basic Stealth Ring, an item which will hide the user's playername when equipped[m
+  */[m
+[31m-public class BasicStealthRing extends ItemBasic implements IBauble{[m
+[31m-	[m
+[32m+[m[32mpublic class BasicStealthRing extends ItemBasic implements IBauble {[m[41m[m
+[32m+[m	[32mprotected boolean hidden;[m[41m[m
+[32m+[m	[32mprotected EntityLivingBase holder;[m[41m[m
+[32m+[m[41m[m
+ 	public BasicStealthRing(String name) {[m
+ 		super(name);[m
+[32m+[m		[32mMinecraftForge.EVENT_BUS.register(new NameRenderEventHandler(this));[m[41m[m
+ 	}[m
+[32m+[m[41m[m
+ 	@Override[m
+ 	public BaubleType getBaubleType(ItemStack arg0) {[m
+ 		return BaubleType.RING;[m
+ 	}[m
+[31m-	[m
+[32m+[m[41m[m
+ 	public void onEquipped(ItemStack itemstack, EntityLivingBase player) {[m
+[31m-		[m
+[32m+[m		[32m// Does this method run when loading in a character too? Is it remembered[m[41m[m
+[32m+[m		[32m// between restarts?[m[41m[m
+[32m+[m		[32mholder = player;[m[41m[m
+[32m+[m		[32mhidden = true;[m[41m[m
+[32m+[m		[32mSystem.out.println("BasicStealthRing equipped!");[m[41m[m
+ 	}[m
+[31m-	[m
+[32m+[m[41m[m
+ 	public void onUnequipped(ItemStack itemstack, EntityLivingBase player) {[m
+[31m-		[m
+[32m+[m		[32mhidden = false;[m[41m[m
+ 	}[m
+[31m-	[m
+[32m+[m[41m[m
+[32m+[m[41m[m
+[32m+[m[41m[m
+ }[m
+[32m+[m[41m[m
+[32m+[m[32mclass NameRenderEventHandler {[m[41m[m
+[32m+[m	[32mprivate BasicStealthRing bsring;[m[41m[m
+[32m+[m	[32mpublic NameRenderEventHandler(BasicStealthRing basicStealthRing) {[m[41m[m
+[32m+[m		[32mbsring = basicStealthRing;[m[41m[m
+[32m+[m	[32m}[m[41m[m
+[32m+[m[41m[m
+[32m+[m	[32m@SubscribeEvent[m[41m[m
+[32m+[m	[32mpublic void setHidden(RenderLivingEvent.Pre<EntityLivingBase> event) {[m[41m[m
+[32m+[m		[32mif (event.isCancelable() && bsring.hidden) {[m[41m[m
+[32m+[m			[32mevent.setCanceled(true);[m[41m[m
+[32m+[m		[32m} else {[m[41m[m
+[32m+[m			[32mevent.setCanceled(false);[m[41m[m
+[32m+[m		[32m}[m[41m[m
+[32m+[m	[32m}[m[41m[m
+[32m+[m[32m}[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m/*[m[41m[m
+[32m+[m[32m * New approach: Create new class containing static methods. Have arguments[m[41m[m
+[32m+[m[32m * passed from the item class to the event handler class. Other class hide functioN: bool hidden, player,[m[41m[m
+[32m+[m[32m */[m[41m[m
+[1mdiff --git a/src/main/resources/assets/qbaubles/lang/en_us.lang b/src/main/resources/assets/qbaubles/lang/en_us.lang[m
+[1mindex 0bc54ab..3ad68e5 100644[m
+[1m--- a/src/main/resources/assets/qbaubles/lang/en_us.lang[m
+[1m+++ b/src/main/resources/assets/qbaubles/lang/en_us.lang[m
+[36m@@ -1,2 +1,3 @@[m
+ item.basicstealthring.name=Basic Stealth Ring[m
+[31m-item.godring.name=God Ring[m
+\ No newline at end of file[m
+[32m+[m[32mitem.godring.name=God Ring[m[41m[m
+[32m+[m[32mitem.shieldingring.name=Shielding Belt[m
+\ No newline at end of file[m
