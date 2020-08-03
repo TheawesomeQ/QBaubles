@@ -13,48 +13,31 @@ import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class ShieldingRing extends ItemBasic implements IBauble {
-	protected boolean isEquipped;
+	protected boolean shielded;
 	protected EntityLivingBase holder;
 
 	public ShieldingRing(String name) {
 		super(name);
-//		this.setEquipped(false);
-//		this.holder = null;
 		MinecraftForge.EVENT_BUS.register(new ShieldingEventHandler(this));
 	}
 
 	@Override
 	public BaubleType getBaubleType(ItemStack arg0) {
-		// TODO: Choose what type of bauble it should be
-		return BaubleType.BELT;
+		return BaubleType.RING;
 	}
 
-	public void onEquip(ItemStack itemstack, EntityLivingBase player) {
-		this.setEquipped(true);
-		this.setHolder(player);
-		System.out.println("ShieldingRing equipped!");
-//		System.out.println("Qbaubles: equipped: " + itemstack.getDisplayName() + " to Player: " + player.getName());
+	public void onEquipped(ItemStack itemstack, EntityLivingBase player) {
+		holder = player;
+		shielded = true;
+//		System.out.println("ShieldingRing equipped to player: " + player.getName());
 	}
 
-	public void onUnequip(ItemStack itemstack, EntityLivingBase player) {
-		isEquipped = false;
+	public void onUnequipped(ItemStack itemstack, EntityLivingBase player) {
+		holder = null;
+		shielded = false;
 	}
 
-	public boolean getEquipped() {
-		return isEquipped;
-	}
 
-	public void setEquipped(boolean isEquipped) {
-		this.isEquipped = isEquipped;
-	}
-
-	public EntityLivingBase getHolder() {
-		return holder;
-	}
-
-	public void setHolder(EntityLivingBase holder) {
-		this.holder = holder;
-	}
 
 }
 
@@ -67,13 +50,14 @@ class ShieldingEventHandler {
 
 	@SubscribeEvent
 	public void deflectArrow(ProjectileImpactEvent.Arrow event) {
-		System.out.println("Deflect Arrow Event Triggered!!!");
-		if (shield_ring.getHolder() != null) {
-			// Deflect the arrow (i.e. cancel the impact event) if the player is holding the
-			// ring and is sneaking.
-			event.setCanceled(shield_ring.getEquipped() && shield_ring.getHolder().isSneaking());
-			event.getArrow();
-			System.out.print(shield_ring.getEquipped());
+//		if (shield_ring.holder!=null) {System.out.println("Deflect Arrow Event Triggered!!! Player: "+shield_ring.holder.getName());}
+		if ((shield_ring.holder != null) && (event.isCancelable())) {
+			// Arrows are bounced if damage = 0. So, set damage to 0 if equipped & sneaking
+			// Old approach canceled the impact and caused arrows to fly right through.
+			if(shield_ring.shielded && shield_ring.holder.isSneaking()) {
+			//event.setCanceled(true);
+			event.getArrow().setDamage(0);}
+			System.out.print(shield_ring.shielded);
 			// System.out.print(shield_ring.getHolder().isSneaking());
 
 		}
