@@ -29,7 +29,7 @@ public class ModItems {
 		// the string "basicstealthring" is the item id
 		basicstealthring = new BasicStealthRing("basicstealthring").setCreativeTab(CreativeTabs.MISC).setMaxStackSize(1);
 		godring = new GodRing("godring").setMaxStackSize(1);
-		shieldingring = new ShieldingRing("shieldingring").setMaxStackSize(1);
+		shieldingring = new ShieldingRing("shieldingring").setCreativeTab(CreativeTabs.COMBAT).setMaxStackSize(1);
 	}
 
 	// This @ tag is used to assign event handlers for forge events. This one
