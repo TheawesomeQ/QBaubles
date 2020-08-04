@@ -12,6 +12,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -33,6 +37,24 @@ public class ShieldingRing extends ItemBasic implements IBauble {
 	public void onUnequipped(ItemStack itemstack, EntityLivingBase player) {
 	}
 
+
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+		if(!world.isRemote) { 
+			IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);
+			for(int i = 0; i < baubles.getSlots(); i++) 
+				if((baubles.getStackInSlot(i) == null || baubles.getStackInSlot(i).isEmpty()) && baubles.isItemValidForSlot(i, player.getHeldItem(hand), player)) {
+					baubles.setStackInSlot(i, player.getHeldItem(hand).copy());
+					if(!player.capabilities.isCreativeMode){
+						player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemStack.EMPTY);
+					}
+					onEquipped(player.getHeldItem(hand), player);
+					break;
+				}
+		}
+		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
+	}
+	
 }
 
 class ShieldingEventHandler {
