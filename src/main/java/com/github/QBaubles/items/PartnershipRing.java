@@ -1,33 +1,21 @@
 package com.github.QBaubles.items;
 
+import java.util.Random;
+
 import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
 import baubles.api.IBauble;
 import baubles.api.cap.IBaublesItemHandler;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
 public class PartnershipRing extends ItemBasic implements IBauble {
-	PartnershipRing partnerRing = null;
-	public PartnershipRing getPartnerRing() {
-		return partnerRing;
-	}
-
-	public void setPartnerRing(PartnershipRing newPartnerRing) {
-		// Recursive call: If this item is paired, set the other item's field to null.
-		// if this is being called to set to null, to prevent infinitely calling eachother back and forth, assume that 
-		// the caller is setting itself to null and don't call it again here.
-		if (this.partnerRing!=null && newPartnerRing!=null) {
-			this.partnerRing.setPartnerRing(null);
-		}
-		this.partnerRing = newPartnerRing;
-	}
 
 	public PartnershipRing(String name) {
 		super(name);
@@ -39,7 +27,8 @@ public class PartnershipRing extends ItemBasic implements IBauble {
 	}
 
 	public void onWornTick(ItemStack itemstack, EntityLivingBase target) {
-
+		// First, check that both rings are being worn.
+		
 	}
 	
 	public void onEquipped(ItemStack itemstack, EntityLivingBase player) {		
@@ -68,14 +57,13 @@ public class PartnershipRing extends ItemBasic implements IBauble {
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		if (!world.isRemote) {
 			IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);
-
+			ItemStack equippedring = null;
 			// Check slots for an already equipped partnershipRing
 			boolean isEquipped = false;
-			PartnershipRing newPartner = null;
 			for (int i = 0; i < baubles.getSlots(); i++) {
 				if (baubles.getStackInSlot(i).getItem() instanceof PartnershipRing) {
 					isEquipped = true;
-					newPartner = (PartnershipRing) baubles.getStackInSlot(i).getItem();
+					equippedring = baubles.getStackInSlot(i);
 					break;
 				}
 			}
@@ -83,15 +71,35 @@ public class PartnershipRing extends ItemBasic implements IBauble {
 				// If player has one already equipped, do not equip another. Set the partner for
 				// both rings here.
 				
-				//Unpair old ring if it's already paired
-				if(this.getPartnerRing() != null ) {
-					this.getPartnerRing().setPartnerRing(null);
-				}
+				// Get the held ring itemstack to work on. The other itemstack (equippedring)
+				// was already found during the searching loop.
+				ItemStack heldring = player.getHeldItem(hand);
+				// Generate a random ID to use.
+				Random rand = new Random();
+				int randID = rand.nextInt();
+						
 				// Set this ring
-				this.setPartnerRing(newPartner);
+				NBTTagCompound nbt;
+				// Get or create NBT tag
+				if(heldring.hasTagCompound()) {
+					nbt = heldring.getTagCompound();
+				} else {
+					nbt = new NBTTagCompound();
+				}
+				// Set tag parameter
+				nbt.setInteger("PairID", randID);
+				// Set tag to itemstack
+				heldring.setTagCompound(nbt);
 				
 				// Set other ring
-				newPartner.setPartnerRing(this);
+				if(equippedring.hasTagCompound()) {
+					nbt = equippedring.getTagCompound();
+				} else {
+					nbt = new NBTTagCompound();
+				}
+				nbt.setInteger("PairID", randID);
+				equippedring.setTagCompound(nbt);
+				
 			} else {
 
 				for (int i = 0; i < baubles.getSlots(); i++)
@@ -130,4 +138,31 @@ public class PartnershipRing extends ItemBasic implements IBauble {
  * Check whether paired
  * Get & compare dimension
  * Get & compare world position
+ * 
+ * 
+ * 
+ * Rethink:
+ * Set unique-enough ID NBT for each, and when pairing set
+ * a partner ID NBT on the item.
+ * Regularly check nearby players for the item, and if it matches, apply
+ * the effect.
+ * There should be no problem with conflicting ID's, even if it is the same
+ * as the one it's paired with (assuming yourself isn't one of the
+ * nearby entities scanned). The only time a problem with conflict arises
+ * is if there are two other nearby players with matching ID's.
+ * 
+ * Rethink again:
+ * When pairing, set a unique-enough NBT to the BOTH rings.
+ * To check buff, check that nearby player is wearing the ring
+ * and that it has the same NBT ID.
+ * This will create a rare but pre-known bug of collisions,
+ * where two pairs will randomly have chosen the
+ * same ID, and so all four work for eachother
+ * even though they are two separate pairs.
+ * Pairing a previously paired ring will
+ * not clear the old partner, it will only
+ * cahnge itself and the new partner.
+ * 
+ * This will require a total rewrite of the item for
+ * the next version.
  */
