@@ -1,5 +1,6 @@
 package com.github.QBaubles.items;
 
+import java.util.List;
 import java.util.Random;
 
 import baubles.api.BaubleType;
@@ -13,10 +14,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 
 public class PartnershipRing extends ItemBasic implements IBauble {
-
+	// This should be set to read from a user-settable configuration.
+	// For now though, a constant value is fine.
+	static final int RANGE = 48;
 	public PartnershipRing(String name) {
 		super(name);
 	}
@@ -26,9 +30,61 @@ public class PartnershipRing extends ItemBasic implements IBauble {
 		return BaubleType.RING;
 	}
 
-	public void onWornTick(ItemStack itemstack, EntityLivingBase target) {
-		// First, check that both rings are being worn.
+	public void onWornTick(ItemStack itemstack, EntityLivingBase player) {
+		// Potential bug in this class: if rings somehow get an NBT compound tag
+		// without being paired, the PairID will be blank and will probably crash
+		// if this tries to read it.
 		
+		// Fix: use .hasKey("PairID")
+		// Also: replace getTag with getInteger("PairID")
+		
+		// Check that world isn't remote (i.e. we're on the server side) and
+		// make sure this ring is paired (i.e. it has a PairID tag)
+		//System.out.println("hasTagCompound: "+itemstack.hasTagCompound());
+		//System.out.println("hasKey: "+itemstack.getTagCompound().hasKey("PairID"));
+		if ((!player.getEntityWorld().isRemote) && itemstack.hasTagCompound() && itemstack.getTagCompound().hasKey("PairID")) {
+			//System.out.println("Running a check for nearby players with rings");
+			// Get all entities within a bounding box on the player.
+			List<EntityPlayer> e = player.getEntityWorld().getEntitiesWithinAABB(EntityPlayer.class,
+					new AxisAlignedBB(player.posX - RANGE, player.posY - RANGE, player.posZ - RANGE,
+							player.posX + RANGE, player.posY + RANGE, player.posZ + RANGE));
+			for (int i = 0; i < e.size(); i++) {
+				// Ignore the player themself
+				if(e.get(i) == player) {
+					continue;
+				}
+				
+				// Loop through their baubles to check for a PartnershipRing,
+				// and if found, check if it has matching NBT PairID.
+				boolean isMatch = false;
+				IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(e.get(i));
+				
+				for (int j = 0; j < baubles.getSlots(); j++) {
+					if (baubles.getStackInSlot(j).getItem() instanceof PartnershipRing) {
+						System.out.println("PartnershipRing found.");
+						// Only act if the ring has an NBT Compound tag and
+						// is paired (i.e. has tag PairID)
+						if (baubles.getStackInSlot(j).hasTagCompound()
+								&& baubles.getStackInSlot(j).getTagCompound().hasKey("PairID")) {
+							System.out.println("Ring ID: "+itemstack.getTagCompound().getInteger("PairID")+" Found ID: "+baubles.getStackInSlot(j).getTagCompound().getInteger("PairID"));
+							isMatch = baubles.getStackInSlot(j).getTagCompound().getInteger("PairID") == itemstack
+									.getTagCompound().getInteger("PairID");
+						}
+						// Regardless of if it was matched, if the player
+						// was wearing an instanceof PartnershipRing we've found
+						// what we were looking for and can stop looping
+						// through their bauble slots
+						break;
+					}
+				}
+
+				// If they have a match, apply the buff and break the player search loop.
+				if (isMatch) {
+					System.out.println("Player Ring Match Found ID: " + itemstack.getTagCompound().getInteger("PairID"));
+					break;
+				}
+			}
+		}
 	}
 	
 	public void onEquipped(ItemStack itemstack, EntityLivingBase player) {		
@@ -99,7 +155,7 @@ public class PartnershipRing extends ItemBasic implements IBauble {
 				}
 				nbt.setInteger("PairID", randID);
 				equippedring.setTagCompound(nbt);
-				
+				System.out.println("Paired with ID: " + randID);
 			} else {
 
 				for (int i = 0; i < baubles.getSlots(); i++)
