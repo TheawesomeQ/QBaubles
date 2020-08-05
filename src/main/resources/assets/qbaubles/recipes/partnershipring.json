@@ -1,0 +1,34 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern":
+	[
+		" D ",
+		"RGL",
+		"   "
+	],
+	"key":
+	{
+		"D":
+		{
+			"item": "minecraft:diamond"
+		},
+		"R":
+		{
+			"item": "minecraft:redstone"
+		},
+		"G":
+		{
+			"item": "minecraft:gold_ingot"
+		},
+		"L":
+		{
+			"item": "minecraft:dye",
+			"data": 4
+		}
+		
+	},
+	"result": {
+		"item": "qbaubles:partnershipring",
+		"count": 1
+	}
+}
