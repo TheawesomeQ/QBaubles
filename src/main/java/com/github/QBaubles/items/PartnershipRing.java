@@ -9,8 +9,10 @@ import baubles.api.IBauble;
 import baubles.api.cap.IBaublesItemHandler;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
@@ -61,12 +63,11 @@ public class PartnershipRing extends ItemBasic implements IBauble {
 				
 				for (int j = 0; j < baubles.getSlots(); j++) {
 					if (baubles.getStackInSlot(j).getItem() instanceof PartnershipRing) {
-						System.out.println("PartnershipRing found.");
+						//System.out.println("PartnershipRing found.");
 						// Only act if the ring has an NBT Compound tag and
 						// is paired (i.e. has tag PairID)
 						if (baubles.getStackInSlot(j).hasTagCompound()
 								&& baubles.getStackInSlot(j).getTagCompound().hasKey("PairID")) {
-							System.out.println("Ring ID: "+itemstack.getTagCompound().getInteger("PairID")+" Found ID: "+baubles.getStackInSlot(j).getTagCompound().getInteger("PairID"));
 							isMatch = baubles.getStackInSlot(j).getTagCompound().getInteger("PairID") == itemstack
 									.getTagCompound().getInteger("PairID");
 						}
@@ -80,7 +81,21 @@ public class PartnershipRing extends ItemBasic implements IBauble {
 
 				// If they have a match, apply the buff and break the player search loop.
 				if (isMatch) {
-					System.out.println("Player Ring Match Found ID: " + itemstack.getTagCompound().getInteger("PairID"));
+					//System.out.println("Player Ring Match Found ID: " + itemstack.getTagCompound().getInteger("PairID"));
+					if (player.ticksExisted % 39 == 0) {
+						// Reapplying the effect caused the boost health to be reset. 
+						// https://forums.minecraftforge.net/topic/22351-how-to-give-entities-a-health-boost-if-special-armour-is-worn/
+						// I copied that code to check whether the effect was still active and if it was,
+						// extend it with the combine method.
+						if (!player.isPotionActive(MobEffects.HEALTH_BOOST)) {
+							player.addPotionEffect(new PotionEffect(MobEffects.HEALTH_BOOST, 60, 0, true, true));
+						} else {
+							PotionEffect potionEffect = player.getActivePotionEffect(MobEffects.HEALTH_BOOST);
+							if(potionEffect.getDuration() < 60) {
+								potionEffect.combine(new PotionEffect(MobEffects.HEALTH_BOOST, 60, 0, true, true));
+							}
+						}
+					}
 					break;
 				}
 			}
