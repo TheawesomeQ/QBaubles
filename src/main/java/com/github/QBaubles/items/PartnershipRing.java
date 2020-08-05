@@ -33,70 +33,70 @@ public class PartnershipRing extends ItemBasic implements IBauble {
 	}
 
 	public void onWornTick(ItemStack itemstack, EntityLivingBase player) {
-		// Potential bug in this class: if rings somehow get an NBT compound tag
-		// without being paired, the PairID will be blank and will probably crash
-		// if this tries to read it.
-		
-		// Fix: use .hasKey("PairID")
-		// Also: replace getTag with getInteger("PairID")
-		
-		// Check that world isn't remote (i.e. we're on the server side) and
-		// make sure this ring is paired (i.e. it has a PairID tag)
-		//System.out.println("hasTagCompound: "+itemstack.hasTagCompound());
-		//System.out.println("hasKey: "+itemstack.getTagCompound().hasKey("PairID"));
-		if ((!player.getEntityWorld().isRemote) && itemstack.hasTagCompound() && itemstack.getTagCompound().hasKey("PairID")) {
-			//System.out.println("Running a check for nearby players with rings");
-			// Get all entities within a bounding box on the player.
-			List<EntityPlayer> e = player.getEntityWorld().getEntitiesWithinAABB(EntityPlayer.class,
-					new AxisAlignedBB(player.posX - RANGE, player.posY - RANGE, player.posZ - RANGE,
-							player.posX + RANGE, player.posY + RANGE, player.posZ + RANGE));
-			for (int i = 0; i < e.size(); i++) {
-				// Ignore the player themself
-				if(e.get(i) == player) {
-					continue;
-				}
-				
-				// Loop through their baubles to check for a PartnershipRing,
-				// and if found, check if it has matching NBT PairID.
-				boolean isMatch = false;
-				IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(e.get(i));
-				
-				for (int j = 0; j < baubles.getSlots(); j++) {
-					if (baubles.getStackInSlot(j).getItem() instanceof PartnershipRing) {
-						//System.out.println("PartnershipRing found.");
-						// Only act if the ring has an NBT Compound tag and
-						// is paired (i.e. has tag PairID)
-						if (baubles.getStackInSlot(j).hasTagCompound()
-								&& baubles.getStackInSlot(j).getTagCompound().hasKey("PairID")) {
-							isMatch = baubles.getStackInSlot(j).getTagCompound().getInteger("PairID") == itemstack
-									.getTagCompound().getInteger("PairID");
-						}
-						// Regardless of if it was matched, if the player
-						// was wearing an instanceof PartnershipRing we've found
-						// what we were looking for and can stop looping
-						// through their bauble slots
-						break;
-					}
-				}
+		if (player.ticksExisted % 39 == 0) {
 
-				// If they have a match, apply the buff and break the player search loop.
-				if (isMatch) {
-					//System.out.println("Player Ring Match Found ID: " + itemstack.getTagCompound().getInteger("PairID"));
-					if (player.ticksExisted % 39 == 0) {
-						// Reapplying the effect caused the boost health to be reset. 
+			// Check that world isn't remote (i.e. we're on the server side) and
+			// make sure this ring is paired (i.e. it has a PairID tag)
+			// System.out.println("hasTagCompound: "+itemstack.hasTagCompound());
+			// System.out.println("hasKey: "+itemstack.getTagCompound().hasKey("PairID"));
+			if ((!player.getEntityWorld().isRemote) && itemstack.hasTagCompound()
+					&& itemstack.getTagCompound().hasKey("PairID")) {
+				// System.out.println("Running a check for nearby players with rings");
+				// Get all entities within a bounding box on the player.
+				List<EntityPlayer> e = player.getEntityWorld().getEntitiesWithinAABB(EntityPlayer.class,
+						new AxisAlignedBB(player.posX - RANGE, player.posY - RANGE, player.posZ - RANGE,
+								player.posX + RANGE, player.posY + RANGE, player.posZ + RANGE));
+				for (int i = 0; i < e.size(); i++) {
+					// Ignore the player themself
+					if (e.get(i) == player) {
+						continue;
+					}
+
+					// Loop through their baubles to check for a PartnershipRing,
+					// and if found, check if it has matching NBT PairID.
+					boolean isMatch = false;
+					IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(e.get(i));
+
+					for (int j = 0; j < baubles.getSlots(); j++) {
+						if (baubles.getStackInSlot(j).getItem() instanceof PartnershipRing) {
+							// System.out.println("PartnershipRing found.");
+							// Only act if the ring has an NBT Compound tag and
+							// is paired (i.e. has tag PairID)
+							if (baubles.getStackInSlot(j).hasTagCompound()
+									&& baubles.getStackInSlot(j).getTagCompound().hasKey("PairID")) {
+								isMatch = baubles.getStackInSlot(j).getTagCompound().getInteger("PairID") == itemstack
+										.getTagCompound().getInteger("PairID");
+							}
+							// Regardless of if it was matched, if the player
+							// was wearing an instanceof PartnershipRing we've found
+							// what we were looking for and can stop looping
+							// through their bauble slots
+							break;
+						}
+					}
+
+					// If they have a match, apply the buff and break the player search loop.
+					if (isMatch) {
+						// System.out.println("Player Ring Match Found ID: " +
+						// itemstack.getTagCompound().getInteger("PairID"));
+
+						// Reapplying the effect caused the boost health to be reset.
 						// https://forums.minecraftforge.net/topic/22351-how-to-give-entities-a-health-boost-if-special-armour-is-worn/
-						// I copied that code to check whether the effect was still active and if it was,
+						// I copied that code to check whether the effect was still active and if it
+						// was,
 						// extend it with the combine method.
 						if (!player.isPotionActive(MobEffects.HEALTH_BOOST)) {
 							player.addPotionEffect(new PotionEffect(MobEffects.HEALTH_BOOST, 60, 0, true, true));
+							player.heal(4);
 						} else {
 							PotionEffect potionEffect = player.getActivePotionEffect(MobEffects.HEALTH_BOOST);
-							if(potionEffect.getDuration() < 60) {
+							if (potionEffect.getDuration() < 60) {
 								potionEffect.combine(new PotionEffect(MobEffects.HEALTH_BOOST, 60, 0, true, true));
 							}
+
 						}
+						break;
 					}
-					break;
 				}
 			}
 		}
