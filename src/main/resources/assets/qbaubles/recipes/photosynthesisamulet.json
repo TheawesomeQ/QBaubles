@@ -1,0 +1,30 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern":
+	[
+		" G ",
+		"G G",
+		"SDS"
+	],
+	"key":
+	{
+		"D":
+		{
+			"item": "minecraft:diamond"
+		},
+		"S":
+		{
+			"item": "minecraft:double_plant",
+			"data": 0
+		},
+		"G":
+		{
+			"item": "minecraft:gold_ingot"
+		}
+
+	},
+	"result": {
+		"item": "qbaubles:photosynthesisamulet",
+		"count": 1
+	}
+}
