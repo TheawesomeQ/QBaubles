@@ -4,6 +4,7 @@ import com.github.QBaubles.QBaublesMod;
 import com.github.QBaubles.items.BasicStealthRing;
 import com.github.QBaubles.items.GodRing;
 import com.github.QBaubles.items.PartnershipRing;
+import com.github.QBaubles.items.PhotosynthesisAmulet;
 import com.github.QBaubles.items.ShieldingRing;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -25,6 +26,7 @@ public class ModItems {
 	static Item godring;
 	static Item shieldingring;
 	static Item partnershipring;
+	static Item photosynthesisamulet;
 
 	// This method will be called to initialize the items specified in this file
 	public static void init() {
@@ -33,6 +35,7 @@ public class ModItems {
 		godring = new GodRing("godring").setMaxStackSize(1);
 		shieldingring = new ShieldingRing("shieldingring").setCreativeTab(CreativeTabs.COMBAT).setMaxStackSize(1);
 		partnershipring = new PartnershipRing("partnershipring").setMaxStackSize(1);
+		photosynthesisamulet = new PhotosynthesisAmulet("photosynthesisamulet");
 	}
 
 	// This @ tag is used to assign event handlers for forge events. This one
@@ -40,7 +43,7 @@ public class ModItems {
 	// Its argument is the event type it is handling: an item type registry event
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> event) {
-		event.getRegistry().registerAll(basicstealthring, godring, shieldingring, partnershipring);
+		event.getRegistry().registerAll(basicstealthring, godring, shieldingring, partnershipring, photosynthesisamulet);
 	}
 
 	@SubscribeEvent
@@ -49,6 +52,7 @@ public class ModItems {
 		registerRender(godring);
 		registerRender(shieldingring);
 		registerRender(partnershipring);
+		registerRender(photosynthesisamulet);
 	}
 
 	private static void registerRender(Item item) {
