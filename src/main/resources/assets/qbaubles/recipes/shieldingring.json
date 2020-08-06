@@ -1,0 +1,25 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern":
+	[
+		"   ",
+		"LSL",
+		"   "
+	],
+	"key":
+	{
+		"S":
+		{
+			"item": "minecraft:shield"
+		},
+		"L":
+		{
+			"item": "minecraft:leather"
+		}
+		
+	},
+	"result": {
+		"item": "qbaubles:shieldingring",
+		"count": 1
+	}
+}
