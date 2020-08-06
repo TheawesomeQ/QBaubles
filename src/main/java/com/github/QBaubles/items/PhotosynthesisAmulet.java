@@ -38,9 +38,9 @@ public class PhotosynthesisAmulet extends ItemBasic implements IBauble {
 			tickprev = tick;
 			tick = player.ticksExisted;
 			if ((tick - tickprev) >= 200) {
-				System.out.println("Timer ping: PhotosynthesisAmulet \n"
+//				System.out.println("Timer ping: PhotosynthesisAmulet \n"
 //					+ "Time diff: "+(time-timeprev)+"\n"
-						+ "Tick diff: " + (tick - tickprev));
+//						+ "Tick diff: " + (tick - tickprev));
 				if (player instanceof EntityPlayer) {
 					if (((EntityPlayer) player).getFoodStats().getFoodLevel()<20 && 
 							player.getEntityWorld().getLightFor(EnumSkyBlock.SKY, player.getPosition())>10 &&
