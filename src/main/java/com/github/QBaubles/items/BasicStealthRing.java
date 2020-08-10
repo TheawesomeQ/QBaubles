@@ -2,8 +2,8 @@ package com.github.QBaubles.items;
 
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
@@ -17,6 +17,8 @@ public class BasicStealthRing extends ItemBasic implements IBauble {
 	long TICKS_PER_CHECK = 40;
 	public BasicStealthRing(String name) {
 		super(name);
+		this.setCreativeTab(CreativeTabs.MISC);
+		this.setMaxStackSize(1);
 	}
 
 	@Override

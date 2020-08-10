@@ -8,7 +8,6 @@ import com.github.QBaubles.items.PhotosynthesisAmulet;
 import com.github.QBaubles.items.ShieldingRing;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
@@ -31,10 +30,10 @@ public class ModItems {
 	// This method will be called to initialize the items specified in this file
 	public static void init() {
 		// the string "basicstealthring" is the item id
-		basicstealthring = new BasicStealthRing("basicstealthring").setCreativeTab(CreativeTabs.MISC).setMaxStackSize(1);
-		godring = new GodRing("godring").setMaxStackSize(1);
-		shieldingring = new ShieldingRing("shieldingring").setCreativeTab(CreativeTabs.COMBAT).setMaxStackSize(1);
-		partnershipring = new PartnershipRing("partnershipring").setMaxStackSize(1);
+		basicstealthring = new BasicStealthRing("basicstealthring");
+		godring = new GodRing("godring");
+		shieldingring = new ShieldingRing("shieldingring");
+		partnershipring = new PartnershipRing("partnershipring");
 		photosynthesisamulet = new PhotosynthesisAmulet("photosynthesisamulet");
 	}
 

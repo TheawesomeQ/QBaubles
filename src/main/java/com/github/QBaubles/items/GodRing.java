@@ -9,6 +9,7 @@ public class GodRing extends ItemBasic implements IBauble{
 	
 	public GodRing(String name) {
 		super(name);
+		this.setMaxStackSize(1);
 	}
 	@Override
 	public BaubleType getBaubleType(ItemStack arg0) {

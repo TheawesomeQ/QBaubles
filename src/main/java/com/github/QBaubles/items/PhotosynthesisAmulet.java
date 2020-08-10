@@ -4,6 +4,7 @@ import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
 import baubles.api.IBauble;
 import baubles.api.cap.IBaublesItemHandler;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -17,6 +18,8 @@ public class PhotosynthesisAmulet extends ItemBasic implements IBauble {
 
 	public PhotosynthesisAmulet(String name) {
 		super(name);
+		this.setMaxStackSize(1);
+		this.setCreativeTab(CreativeTabs.MISC);
 	}
 
 	@Override

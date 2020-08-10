@@ -8,6 +8,7 @@ import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
 import baubles.api.IBauble;
 import baubles.api.cap.IBaublesItemHandler;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,6 +24,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class ShieldingRing extends ItemBasic implements IBauble {
 	public ShieldingRing(String name) {
 		super(name);
+		this.setCreativeTab(CreativeTabs.COMBAT);
+		this.setMaxStackSize(1);
 		MinecraftForge.EVENT_BUS.register(new ShieldingEventHandler());
 	}
 

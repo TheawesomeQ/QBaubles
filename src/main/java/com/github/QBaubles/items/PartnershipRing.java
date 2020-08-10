@@ -25,6 +25,7 @@ public class PartnershipRing extends ItemBasic implements IBauble {
 	static final int RANGE = 48;
 	public PartnershipRing(String name) {
 		super(name);
+		this.setMaxStackSize(1);
 	}
 
 	@Override
