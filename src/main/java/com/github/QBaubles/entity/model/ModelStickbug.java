@@ -53,14 +53,15 @@ public class ModelStickbug extends ModelBase {
 	}
 
 	@Override
-	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-		lf_leg.render(f5);
-		lm_leg.render(f5);
-		lr_leg.render(f5);
-		rf_leg.render(f5);
-		rm_leg.render(f5);
-		rr_leg.render(f5);
-		bb_main.render(f5);
+	public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+        this.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entityIn);
+		lf_leg.render(scale);
+		lm_leg.render(scale);
+		lr_leg.render(scale);
+		rf_leg.render(scale);
+		rm_leg.render(scale);
+		rr_leg.render(scale);
+		bb_main.render(scale);
 	}
 
 //	public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
@@ -86,4 +87,14 @@ public class ModelStickbug extends ModelBase {
         this.lf_leg.rotateAngleZ = LEG_ANGLE;
         this.lr_leg.rotateAngleZ = LEG_ANGLE;
     }
+
+// Flapping version
+//    public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
+//        this.rr_leg.rotateAngleZ = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
+//        this.rf_leg.rotateAngleZ = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
+//        this.lm_leg.rotateAngleZ = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
+//        this.rm_leg.rotateAngleZ = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
+//        this.lf_leg.rotateAngleZ = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
+//        this.lr_leg.rotateAngleZ = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
+//    }
 }
