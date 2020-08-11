@@ -70,15 +70,19 @@ public class ModelStickbug extends ModelBase {
 //		modelRenderer.rotateAngleZ = z;
 //	}
 	
+	private final float SPEEDMULT = 1.0F;
 	private final float LEG_ANGLE = 0.58119464F;
     public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
-        this.rr_leg.rotateAngleY = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * limbSwingAmount;
-        this.rf_leg.rotateAngleY = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * limbSwingAmount;
-        this.lm_leg.rotateAngleY = MathHelper.cos(limbSwing * 0.6662F) * limbSwingAmount;
-        this.rm_leg.rotateAngleY = MathHelper.cos(limbSwing * 0.6662F) * limbSwingAmount;
-        this.lf_leg.rotateAngleY = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * limbSwingAmount;
-        this.lr_leg.rotateAngleY = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * limbSwingAmount;
-        // change: lf and lr to be with rf and rr, and change lm to be with rm
+        this.rr_leg.rotateAngleY = MathHelper.cos(limbSwing * 0.6662F * SPEEDMULT + (float)Math.PI) * 1.4F * limbSwingAmount;
+        this.rf_leg.rotateAngleY = MathHelper.cos(limbSwing * 0.6662F * SPEEDMULT + (float)Math.PI) * 1.4F * limbSwingAmount;
+        this.lm_leg.rotateAngleY = MathHelper.cos(limbSwing * 0.6662F * SPEEDMULT) * 1.4F * limbSwingAmount;
+        this.rm_leg.rotateAngleY = MathHelper.cos(limbSwing * 0.6662F * SPEEDMULT) * 1.4F * limbSwingAmount;
+        this.lf_leg.rotateAngleY = MathHelper.cos(limbSwing * 0.6662F * SPEEDMULT + (float)Math.PI) * 1.4F * limbSwingAmount;
+        this.lr_leg.rotateAngleY = MathHelper.cos(limbSwing * 0.6662F * SPEEDMULT + (float)Math.PI) * 1.4F * limbSwingAmount;
+        
+        if (Math.abs((MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount))>0.2F) {
+        	System.out.println("rr_leg Angle: "+ (MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount));
+        }
         
         this.rr_leg.rotateAngleZ = -LEG_ANGLE;
         this.rf_leg.rotateAngleZ = -LEG_ANGLE;
