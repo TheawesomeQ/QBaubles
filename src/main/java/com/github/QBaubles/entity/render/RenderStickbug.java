@@ -1,13 +1,16 @@
 package com.github.QBaubles.entity.render;
 
-import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.util.ResourceLocation;
-
 import com.github.QBaubles.QBaublesMod;
 import com.github.QBaubles.entity.EntityStickbug;
 import com.github.QBaubles.entity.model.ModelStickbug;
 
+import net.minecraft.client.renderer.entity.RenderLiving;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+@SideOnly(Side.CLIENT)
 public class RenderStickbug extends RenderLiving<EntityStickbug> {
 	public static final ResourceLocation STICKBUG_TEXTURES = new ResourceLocation(QBaublesMod.MODID +":textures/entity/stickbug.png");
 	public RenderStickbug(RenderManager rendermanagerIn) {

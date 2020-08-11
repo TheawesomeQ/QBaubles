@@ -7,6 +7,7 @@ import net.minecraft.entity.Entity;
 //Made with Blockbench 3.6.5
 //Exported for Minecraft version 1.12
 //Paste this class into your mod and generate all required imports
+import net.minecraft.util.math.MathHelper;
 
 
 public class ModelStickbug extends ModelBase {
@@ -62,9 +63,27 @@ public class ModelStickbug extends ModelBase {
 		bb_main.render(f5);
 	}
 
-	public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
-		modelRenderer.rotateAngleX = x;
-		modelRenderer.rotateAngleY = y;
-		modelRenderer.rotateAngleZ = z;
-	}
+//	public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
+//		modelRenderer.rotateAngleX = x;
+//		modelRenderer.rotateAngleY = y;
+//		modelRenderer.rotateAngleZ = z;
+//	}
+	
+	private final float LEG_ANGLE = 0.58119464F;
+    public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
+        this.rr_leg.rotateAngleY = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * limbSwingAmount;
+        this.rf_leg.rotateAngleY = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * limbSwingAmount;
+        this.lm_leg.rotateAngleY = MathHelper.cos(limbSwing * 0.6662F) * limbSwingAmount;
+        this.rm_leg.rotateAngleY = MathHelper.cos(limbSwing * 0.6662F) * limbSwingAmount;
+        this.lf_leg.rotateAngleY = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * limbSwingAmount;
+        this.lr_leg.rotateAngleY = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * limbSwingAmount;
+        // change: lf and lr to be with rf and rr, and change lm to be with rm
+        
+        this.rr_leg.rotateAngleZ = -LEG_ANGLE;
+        this.rf_leg.rotateAngleZ = -LEG_ANGLE;
+        this.rm_leg.rotateAngleZ = -LEG_ANGLE;
+        this.lm_leg.rotateAngleZ = LEG_ANGLE;
+        this.lf_leg.rotateAngleZ = LEG_ANGLE;
+        this.lr_leg.rotateAngleZ = LEG_ANGLE;
+    }
 }

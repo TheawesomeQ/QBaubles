@@ -25,7 +25,7 @@ public class ModEntities {
 				.id(new ResourceLocation("stickbug"), 420)
 				.name("stickbug")
 				.egg(0xb08e4a, 0xbdab35)
-				.tracker(50, 5, false)
+				.tracker(50, 5, true) //https://forums.minecraftforge.net/topic/67830-what-is-entity-tracking/
 				.build();
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityStickbug.class, new IRenderFactory<EntityStickbug>() {
