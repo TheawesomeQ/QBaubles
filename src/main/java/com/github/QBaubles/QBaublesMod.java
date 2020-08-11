@@ -1,4 +1,5 @@
 package com.github.QBaubles;
+import com.github.QBaubles.init.ModEntities;
 import com.github.QBaubles.init.ModItems;
 
 /*
@@ -29,6 +30,7 @@ public class QBaublesMod {
     	
     	// Initialize custom items for this mod
     	ModItems.init();
+    	ModEntities.init();
     }
 
     @EventHandler
