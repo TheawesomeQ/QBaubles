@@ -80,9 +80,9 @@ public class ModelStickbug extends ModelBase {
         this.lf_leg.rotateAngleY = MathHelper.cos(limbSwing * 0.6662F * SPEEDMULT + (float)Math.PI) * 1.4F * limbSwingAmount;
         this.lr_leg.rotateAngleY = MathHelper.cos(limbSwing * 0.6662F * SPEEDMULT + (float)Math.PI) * 1.4F * limbSwingAmount;
         
-        if (Math.abs((MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount))>0.2F) {
-        	System.out.println("rr_leg Angle: "+ (MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount));
-        }
+//        if (Math.abs((MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount))>0.2F) {
+//        	System.out.println("rr_leg Angle: "+ (MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount));
+//        }
         
         this.rr_leg.rotateAngleZ = -LEG_ANGLE;
         this.rf_leg.rotateAngleZ = -LEG_ANGLE;
