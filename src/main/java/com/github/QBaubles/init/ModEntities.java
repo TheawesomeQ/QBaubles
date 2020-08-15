@@ -1,7 +1,9 @@
 package com.github.QBaubles.init;
 
 import com.github.QBaubles.QBaublesMod;
+import com.github.QBaubles.entity.EntityFamiliar;
 import com.github.QBaubles.entity.EntityStickbug;
+import com.github.QBaubles.entity.render.RenderFamiliar;
 import com.github.QBaubles.entity.render.RenderStickbug;
 
 import net.minecraft.client.renderer.entity.Render;
@@ -18,6 +20,7 @@ import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
 @Mod.EventBusSubscriber(modid = QBaublesMod.MODID)
 public class ModEntities {
 	static EntityEntry stickbug;
+	static EntityEntry familiar;
 	public static void init() {
 		stickbug = EntityEntryBuilder.create()
 				.entity(EntityStickbug.class)
@@ -25,7 +28,7 @@ public class ModEntities {
 				.id(new ResourceLocation("stickbug"), 420)
 				.name("stickbug")
 				.egg(0xb08e4a, 0xbdab35)
-				.tracker(50, 5, true) //https://forums.minecraftforge.net/topic/67830-what-is-entity-tracking/
+				.tracker(64, 5, false) //https://forums.minecraftforge.net/topic/67830-what-is-entity-tracking/
 				.build();
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityStickbug.class, new IRenderFactory<EntityStickbug>() {
@@ -37,11 +40,31 @@ public class ModEntities {
 			}
 			
 		});
+		
+		
+		
+		familiar = EntityEntryBuilder.create()
+				.entity(EntityFamiliar.class)
+				.factory(EntityFamiliar::new)
+				.id(new ResourceLocation("familiar"), 421)
+				.name("familiar")
+				.tracker(80, 3, true)
+				.build();
+		
+		RenderingRegistry.registerEntityRenderingHandler(EntityFamiliar.class, new IRenderFactory<EntityFamiliar>() {
+
+			@Override
+			public Render<? super EntityFamiliar> createRenderFor(RenderManager manager) {
+				// TODO Auto-generated method stub
+				return new RenderFamiliar(manager);
+			}
+			
+		});
 	}
 	
 	@SubscribeEvent
 	public static void registerEntities(RegistryEvent.Register<EntityEntry> event) {
-		event.getRegistry().registerAll(stickbug);
+		event.getRegistry().registerAll(stickbug, familiar);
 	}
 }
 
