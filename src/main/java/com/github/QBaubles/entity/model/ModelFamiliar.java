@@ -73,7 +73,7 @@ public class ModelFamiliar extends ModelBase
         super.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
         this.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entityIn);
 
-        GlStateManager.color(134, 160, 222);
+//        GlStateManager.color(134, 160, 222);
         GlStateManager.enableAlpha();
         GlStateManager.disableLighting();
         GlStateManager.enableBlend();
@@ -86,6 +86,9 @@ public class ModelFamiliar extends ModelBase
         this.wolfLeg4.render(scale);
         this.wolfTail.renderWithRotation(scale);
         this.wolfMane.render(scale);
+        GlStateManager.enableLighting();
+        GlStateManager.disableBlend();
+        
     }
 
     /**
