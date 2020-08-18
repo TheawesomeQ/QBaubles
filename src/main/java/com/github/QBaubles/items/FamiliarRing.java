@@ -1,5 +1,7 @@
 package com.github.QBaubles.items;
 
+import java.util.List;
+
 import com.github.QBaubles.entity.EntityFamiliar;
 
 import baubles.api.BaubleType;
@@ -12,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
@@ -61,6 +64,7 @@ public class FamiliarRing extends ItemBasic implements IBauble {
 // Still have to make this server side only
 
 class FamiliarEventHandler {
+	final int RANGE = 32;
 	@SubscribeEvent
 	public void wearerHit(LivingDamageEvent event) {
 		if (event.getEntityLiving() instanceof EntityPlayer && (
@@ -80,18 +84,36 @@ class FamiliarEventHandler {
 			if (isEquipped) {
 				// Check that a familiar isn't already spawned
 				// If not, summon a familiar with correct target and owner.
-				//System.out.println("UUID:" + ((EntityPlayer) event.getEntityLiving()).getGameProfile().getId());
-				if (event.getSource().getTrueSource() instanceof EntityLivingBase) {
-					EntityFamiliar familiar = new EntityFamiliar(event.getEntityLiving().getEntityWorld());
-					familiar.setPosition(event.getEntityLiving().posX, event.getEntityLiving().posY,
-							event.getEntityLiving().posZ);
-					familiar.setOwnerId(event.getEntityLiving().getPersistentID());
-					familiar.setTamedBy((EntityPlayer) event.getEntityLiving());
-					//System.out.println("TrueSource: " + event.getSource().getTrueSource().getName());
+				
+				// To check if there is a familiar, we will scan nearby
+				// familiars, and check if their owner
+				// is this player.
+				
+				List<EntityFamiliar> e = event.getEntityLiving().getEntityWorld().getEntitiesWithinAABB(EntityFamiliar.class,
+						new AxisAlignedBB(event.getEntityLiving().posX - RANGE, event.getEntityLiving().posY - RANGE, event.getEntityLiving().posZ - RANGE,
+								event.getEntityLiving().posX + RANGE, event.getEntityLiving().posY + RANGE, event.getEntityLiving().posZ + RANGE));
+				boolean alreadySpawned = false;
+				for(int i=0; i<e.size(); i++) {
+					if(e.get(i).getOwnerId() == event.getEntityLiving().getPersistentID()) {
+						alreadySpawned = true;
+					}
+				}
+				
+				if (!alreadySpawned) {
+					// System.out.println("UUID:" + ((EntityPlayer) event.getEntityLiving()).getGameProfile().getId());
+					if (event.getSource().getTrueSource() instanceof EntityLivingBase) {
+						EntityFamiliar familiar = new EntityFamiliar(event.getEntityLiving().getEntityWorld());
+						familiar.setPosition(event.getEntityLiving().posX, event.getEntityLiving().posY,
+								event.getEntityLiving().posZ);
+						familiar.setOwnerId(event.getEntityLiving().getPersistentID());
+						familiar.setTamedBy((EntityPlayer) event.getEntityLiving());
+						// System.out.println("TrueSource: " +
+						// event.getSource().getTrueSource().getName());
 
-					familiar.setAttackTarget((EntityLivingBase) event.getSource().getTrueSource());
-					familiar.setRevengeTarget(event.getEntityLiving().getRevengeTarget());
-					event.getEntityLiving().getEntityWorld().spawnEntity(familiar);
+						familiar.setAttackTarget((EntityLivingBase) event.getSource().getTrueSource());
+						familiar.setRevengeTarget(event.getEntityLiving().getRevengeTarget());
+						event.getEntityLiving().getEntityWorld().spawnEntity(familiar);
+					}
 				}
 			}
 		}
