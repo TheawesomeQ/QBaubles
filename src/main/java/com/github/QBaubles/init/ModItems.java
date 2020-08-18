@@ -2,6 +2,7 @@ package com.github.QBaubles.init;
 
 import com.github.QBaubles.QBaublesMod;
 import com.github.QBaubles.items.BasicStealthRing;
+import com.github.QBaubles.items.FamiliarRing;
 import com.github.QBaubles.items.GodRing;
 import com.github.QBaubles.items.PartnershipRing;
 import com.github.QBaubles.items.PhotosynthesisAmulet;
@@ -26,6 +27,7 @@ public class ModItems {
 	static Item shieldingring;
 	static Item partnershipring;
 	static Item photosynthesisamulet;
+	static Item familiarring;
 
 	// This method will be called to initialize the items specified in this file
 	public static void init() {
@@ -35,6 +37,7 @@ public class ModItems {
 		shieldingring = new ShieldingRing("shieldingring");
 		partnershipring = new PartnershipRing("partnershipring");
 		photosynthesisamulet = new PhotosynthesisAmulet("photosynthesisamulet");
+		familiarring = new FamiliarRing("familiarring");
 	}
 
 	// This @ tag is used to assign event handlers for forge events. This one
@@ -42,7 +45,7 @@ public class ModItems {
 	// Its argument is the event type it is handling: an item type registry event
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> event) {
-		event.getRegistry().registerAll(basicstealthring, godring, shieldingring, partnershipring, photosynthesisamulet);
+		event.getRegistry().registerAll(basicstealthring, godring, shieldingring, partnershipring, photosynthesisamulet, familiarring);
 	}
 
 	@SubscribeEvent
@@ -52,6 +55,7 @@ public class ModItems {
 		registerRender(shieldingring);
 		registerRender(partnershipring);
 		registerRender(photosynthesisamulet);
+		registerRender(familiarring);
 	}
 
 	private static void registerRender(Item item) {
