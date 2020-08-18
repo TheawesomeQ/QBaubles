@@ -1,0 +1,29 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern":
+	[
+		" W ",
+		"GBG",
+		" G "
+	],
+	"key":
+	{
+		"W":
+		{
+			"item": "minecraft:nether_star"
+		},
+		"G":
+		{
+			"item": "minecraft:gold_ingot"
+		},
+		"B":
+		{
+			"item": "minecraft:bone"
+		}
+		
+	},
+	"result": {
+		"item": "qbaubles:familiarring",
+		"count": 1
+	}
+}

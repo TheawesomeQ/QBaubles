@@ -3,3 +3,6 @@ item.godring.name=God Ring
 item.shieldingring.name=Shielding Belt
 item.partnershipring.name=Partnership Ring
 item.photosynthesisamulet.name=Photosynthesis Amulet
+item.familiarring.name=Ring of the Familiar
+entity.familiar.name=Familiar
+entity.stickbug.name=Stick Bug
