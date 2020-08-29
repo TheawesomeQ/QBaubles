@@ -48,19 +48,21 @@ public class ModItems {
 		event.getRegistry().registerAll(basicstealthring, godring, shieldingring, partnershipring, photosynthesisamulet, familiarring);
 	}
 
-	@SubscribeEvent
-	public static void registerRenders(ModelRegistryEvent event) {
-		registerRender(basicstealthring);
-		registerRender(godring);
-		registerRender(shieldingring);
-		registerRender(partnershipring);
-		registerRender(photosynthesisamulet);
-		registerRender(familiarring);
-	}
-
-	private static void registerRender(Item item) {
-		// https://forums.minecraftforge.net/topic/36459-modelresourcelocation-parameters/
-		ModelLoader.setCustomModelResourceLocation(item, 0,
-				new ModelResourceLocation(item.getRegistryName(), "inventory"));
-	}
+	// Unnecessary due to flattening update. Resources are automatically found by their registry name
+	// Example: foodmod:fooitem will be searched for in assets/foomod/models/item/fooitem.json
+//	@SubscribeEvent
+//	public static void registerRenders(ModelRegistryEvent event) {
+//		registerRender(basicstealthring);
+//		registerRender(godring);
+//		registerRender(shieldingring);
+//		registerRender(partnershipring);
+//		registerRender(photosynthesisamulet);
+//		registerRender(familiarring);
+//	}
+//
+//	private static void registerRender(Item item) {
+//		// https://forums.minecraftforge.net/topic/36459-modelresourcelocation-parameters/
+//		ModelLoader.setCustomModelResourceLocation(item, 0,
+//				new ModelResourceLocation(item.getRegistryName(), "inventory"));
+//	}
 }
