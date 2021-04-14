@@ -21,4 +21,4 @@ God Ring: Grants damage immunity.
 
 And a wild meme appears...
 --------------------
-Stickbug mob: seeks out logs to stand on. Does not yet dance.
+Stickbug mob: seeks out leaves to stand on. Does not yet dance.
