@@ -2,6 +2,7 @@
 A mod to add more baubles in Minecraft. Requires the Baubles mod.
 
 Current features include:
+
 Craftable items:
 --------------------
 Shielding Belt: Deflects arrows when crouching
