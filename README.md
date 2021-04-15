@@ -30,3 +30,5 @@ Build instructions
 --------------------
 Extract the folder. Follow the readme.txt for setting up Gradle.
 Use a Java 8 runtime environment. Include Baubles mod in your jar dependencies, tested to work with version 1.5.2.
+Add Baubles-1.12-1.5.2-api.jar and Baubles-1.12-1.5.2-deobf.jar to a new "libs" folder in the project root.
+Run "gradlew build". This will output a mod jar to build/libs/
