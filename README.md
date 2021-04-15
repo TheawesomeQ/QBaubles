@@ -1,5 +1,6 @@
 # QBaubles
 A mod to add more baubles in Minecraft. Requires the Baubles mod.
+https://github.com/Azanor/Baubles
 
 Current features include:
 
@@ -22,3 +23,10 @@ God Ring: Grants damage immunity.
 And a wild meme appears...
 --------------------
 Stickbug mob: seeks out leaves to stand on. Does not yet dance.
+
+
+
+Build instructions
+--------------------
+Extract the folder. Follow the readme.txt for setting up Gradle.
+Use a Java 8 runtime environment. Include Baubles mod in your jar dependencies, tested to work with version 1.5.2.
